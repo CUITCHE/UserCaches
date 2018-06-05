@@ -1,7 +1,9 @@
 # UserCaches
+[![Build Status][TravisBadge]][TravisLink] [![Swift4 compatible][Swift4Badge]][Swift4Link]
+
 A key-value storage cache tool like `UserDefaults` on iOS Platform. 
 
-# Use
+# Usage
 
 ### Normal Usage
 
@@ -89,3 +91,39 @@ UseCaches support by default:
 | CacheCodability\<Codable>                           |
 
 Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap the struct (or class), UseCaches also accept it. See above `CacheCodability<User>`
+
+# Installation
+
+> Note: UseCaches requires Swift 4.1and Xcode 9.3+
+
+### CocoaPods
+
+[CocoaPods](https://cocoapods.org/) is a dependency manager for Cocoa projects. To install UserCaches with CocoaPods:
+
+1. Make sure CocoaPods is [installed](https://guides.cocoapods.org/using/getting-started.html#getting-started). (SQLite.swift requires version 1.0.0 or greater.)
+
+   ```shell
+   # Using the default Ruby install will require you to use sudo when
+   # installing and updating gems.
+   [sudo] gem install cocoapods
+   ```
+
+2. Update your Podfile to include the following:
+
+   ```
+   use_frameworks!
+   
+   target 'YourAppTargetName' do
+       pod 'UserCaches', '~> 0.0.1'
+   end
+   ```
+
+3. Run `pod install --repo-update`.
+
+# Author
+
+[hejunqiu](https://github.com/CUITCHE)
+
+# License
+
+UserCaches is available under the MIT license. 

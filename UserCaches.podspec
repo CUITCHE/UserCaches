@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "UserCache"
+  s.name         = "UserCaches"
   s.version      = "0.0.1"
   s.summary      = "A key-value storage cache tool like UserDefaults on iOS Platform."
 
@@ -133,6 +133,7 @@ Pod::Spec.new do |s|
   #  you can include multiple dependencies to ensure it works.
 
   s.requires_arc = true
+  s.swift_version = '4.1'
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
   s.dependency "SQLite.swift", "~> 0.11.4"
