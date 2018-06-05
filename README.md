@@ -1,5 +1,5 @@
 # UserCaches
-[![Build Status][TravisBadge]][TravisLink] [![Swift4 compatible][Swift4Badge]][Swift4Link]
+[![Build Status][TravisBadge]][TravisLink]  [![Swift4 compatible][Swift4Badge]][Swift4Link]
 
 A key-value storage cache tool like `UserDefaults` on iOS Platform. 
 
@@ -127,3 +127,8 @@ Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap 
 # License
 
 UserCaches is available under the MIT license. 
+
+[TravisBadge]: https://travis-ci.org/CUITCHE/UserCaches.svg?branch=master
+[TravisLink]: https://travis-ci.org/CUITCHE/UserCaches
+[Swift4Badge]: https://img.shields.io/badge/swift-4.1-orange.svg?style=flat
+[Swift4Link]: https://developer.apple.com/swift/
