@@ -65,7 +65,7 @@ let blacklist: [CacheCodability<User>] = ComBaiduMobileUserSetting.privacy_black
 let fontSize: Int = ComBaiduMobileUserSetting.font_size.value() ?? 16
 ```
 
-If you set `identifierModel` to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-letter to lower-case letter and insert "." before translate on enum-name and replace "_" with "." On enum-case. 
+If you set `identifierModel` to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-case letter to lower-case letter and insert "." to translated left side on enum-name and replace "_" with "." On enum-case. 
 
 As above:
 
@@ -90,17 +90,17 @@ UseCaches support by default:
 | Dictionary\<Key: CacheCodable, Value: CacheCodable> |
 | CacheCodability\<Codable>                           |
 
-Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap the struct (or class), UseCaches also accept it. See above `CacheCodability<User>`
+Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap the struct (or class), UserCaches also accept it. See above `CacheCodability<User>`
 
 # Installation
 
-> Note: UseCaches requires Swift 4.1and Xcode 9.3+
+> Note: UserCaches requires Swift 4.1 and Xcode 9.3+
 
 ### CocoaPods
 
 [CocoaPods](https://cocoapods.org/) is a dependency manager for Cocoa projects. To install UserCaches with CocoaPods:
 
-1. Make sure CocoaPods is [installed](https://guides.cocoapods.org/using/getting-started.html#getting-started). (SQLite.swift requires version 1.0.0 or greater.)
+1. Make sure CocoaPods is [installed](https://guides.cocoapods.org/using/getting-started.html#getting-started). (UserCaches requires version 1.0.0 or greater.)
 
    ```shell
    # Using the default Ruby install will require you to use sudo when
