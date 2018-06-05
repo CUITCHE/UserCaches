@@ -119,7 +119,7 @@ class UserCachesTests: XCTestCase {
 
         var array5 = [CacheCodability<User>]()
         for _ in 0..<1000 {
-            array5.append(CacheCodability<User>(value: .demo))
+            array5.append(CacheCodability(value: .demo))
         }
         ComOrganizationProductCaches.array_codable.storage = array5
         XCTAssertEqual(ComOrganizationProductCaches.array_codable.value(), array5)

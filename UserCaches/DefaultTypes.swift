@@ -130,7 +130,7 @@ extension Double: CacheCodable {
 
 extension Date: CacheCodable {
     public static func initialize(fromCache data: Data) -> (instance: Date, restData: Data) {
-        let process: (instance: Double, restData: Data) = _initialize(fromCache: data, header: .date)
+        let process: (instance: TimeInterval, restData: Data) = _initialize(fromCache: data, header: .date)
         return (Date(timeIntervalSince1970: process.instance), process.restData)
     }
 
