@@ -8,4 +8,4 @@ xcode_workspace: UserCaches.xcworkspace
 xcode_scheme: UserCachesTests
 befoe_install: brew update
 script:
-    - xcodebuild clean build -sdk iphonesimulator -workspace UserCaches.xcworkspace -scheme UserCachesTests CODE_SIGNING_REQUIRED=NO
+    - xctool -sdk iphonesimulator -workspace UserCaches.xcworkspace -scheme UserCachesTests run-tests CODE_SIGNING_REQUIRED=NO
