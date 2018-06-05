@@ -1,6 +1,5 @@
 language: objective-c
 osx_image: xcode9.3
-rvm: 2.3
 env:
   global:
     - IOS_SIMULATOR="iPhone 6s"
