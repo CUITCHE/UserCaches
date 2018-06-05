@@ -3,7 +3,7 @@ A key-value storage cache tool like `UserDefaults` on iOS Platform.
 
 # Use
 
-## Normal Usage
+### Normal Usage
 
 Like UserDefaults:
 
@@ -22,7 +22,7 @@ let cacheHelper = UserCaches(suiteName: "com.usercache.helper")
 // The cache file is located at ${YourAppDocuments}/com.usercache.helper.db
 ```
 
-## Advance Usage
+### Advance Usage
 
 **However**, I suggest using following usage. (Example of setting of Baidu App)
 
@@ -63,7 +63,7 @@ let blacklist: [CacheCodability<User>] = ComBaiduMobileUserSetting.privacy_black
 let fontSize: Int = ComBaiduMobileUserSetting.font_size.value() ?? 16
 ```
 
-If you set identifierModel to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-letter to lower-case letter and insert "." Before translate on enum-name and replace "_" with "." On enum-case. 
+If you set `identifierModel` to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-letter to lower-case letter and insert "." before translate on enum-name and replace "_" with "." On enum-case. 
 
 As above:
 
@@ -71,10 +71,21 @@ As above:
 
 "privacy_findMeByPhoneNumber" => "privacy.findMeByPhoneNumber"
 
-The case privacy_findMeByPhoneNumber is translated to `com.baidu.mobile.user.setting.privacy.findMeByPhoneNumber`, as a key, associated with `true` for this example.
+The `case privacy_findMeByPhoneNumber` is translated to `com.baidu.mobile.user.setting.privacy.findMeByPhoneNumber`, as a key, associated with `true` for this example.
 
-## Default Support Type
+### Default Support Type
 
-UseCaches support by default: *Bool*, *Int*, *Int64*, *UInt*, *Uint64*, *Float*, *Double*, *String*, *Data*, *Date* (Implement with TimeInterval), *Array\<CacheCodable>*, *Dictionary\<Key: CacheCodable, Value: CacheCodable>*
+UseCaches support by default: 
+
+| Default Support Type                                |
+| --------------------------------------------------- |
+| Bool                                                |
+| Int, Int64, UInt, Uint64                            |
+| Float, Double                                       |
+| String, Data                                        |
+| Date (Implement with TimeInterval)                  |
+| Array\<CacheCodable>                                |
+| Dictionary\<Key: CacheCodable, Value: CacheCodable> |
+| CacheCodability\<Codable>                           |
 
 Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap the struct (or class), UseCaches also accept it. See above `CacheCodability<User>`
