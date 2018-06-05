@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ObjectiveC
 
 /// Usage as UserDefaults.
 open class UserCaches {

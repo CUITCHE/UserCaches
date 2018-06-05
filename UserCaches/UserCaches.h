@@ -6,7 +6,7 @@
 //  Copyright © 2018年 hejunqiu. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 //! Project version number for UserCaches.
 FOUNDATION_EXPORT double UserCachesVersionNumber;
