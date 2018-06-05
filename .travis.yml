@@ -6,3 +6,4 @@ env:
     - IOS_VERSION="11.3"
 xcode_workspace: UserCaches.xcworkspace
 xcode_scheme: UserCachesTests
+befoe_install: brew update
