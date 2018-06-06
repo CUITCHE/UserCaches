@@ -16,7 +16,7 @@ class CacheManager {
     private let _cache = Table("cache")
     private let key    = Expression<String>("k")
     private let value  = Expression<Data>("v")
-    private let db: Connection
+    let db: Connection
 
     enum Error: Swift.Error {
         case Init(String)
@@ -32,7 +32,6 @@ class CacheManager {
             t.column(key)
             t.column(value)
         })
-        print("Create cache table success at \(fileUrl.absoluteString)")
     }
 
     func findCacheKey(_ key: String) throws -> Int64 {

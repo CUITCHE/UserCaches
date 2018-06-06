@@ -13,6 +13,9 @@ public protocol CacheEncodable {
     /// Encodes this value into binary data.
     ///
     /// - Returns: The data to write data to.
+    /// - Throws:
+    ///   - `EncodingError.invalidValue` if a non-conforming floating-point value is encountered during encoding, and the encoding strategy is `.throw`.
+    ///   - An error if any value throws an error during encoding.
     func toData() throws -> Data
 }
 
@@ -22,6 +25,9 @@ public protocol CacheDecodable {
     ///
     /// - Parameter data: The cache to read data from.
     /// - Returns: (new instance, rest data that has not been used)
+    /// - Throws:
+    ///   - `DecodingError.dataCorrupted` if values requested from the payload are corrupted, or if the given data is not valid JSON.
+    ///   - An error if any value throws an error during decoding.
     static func initialize(fromCache data: Data) throws -> (instance: Self, restData: Data)
 }
 

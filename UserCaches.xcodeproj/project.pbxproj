@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		078906586A094B4CF94B2755 /* Pods_UserCaches.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46A6487936ADE8CE71F44A9 /* Pods_UserCaches.framework */; };
 		E3E84BED44A5BAD38135D26A /* Pods_UserCachesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C05D9B6E15443B8C00FFE023 /* Pods_UserCachesTests.framework */; };
+		FB5DBED020C78CFB00A09C52 /* CodingError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB5DBECF20C78CFB00A09C52 /* CodingError.swift */; };
 		FB72ECBB20C62A3200D07BAD /* CacheCodability.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB72ECBA20C62A3200D07BAD /* CacheCodability.swift */; };
 		FB72ECBD20C6301200D07BAD /* UserCachesSettable.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB72ECBC20C6301200D07BAD /* UserCachesSettable.swift */; };
 		FB72ECBF20C6705E00D07BAD /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB72ECBE20C6705E00D07BAD /* UserModel.swift */; };
@@ -38,6 +39,7 @@
 		F0DD210D5C2F0000251BAAB4 /* Pods-UserCachesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserCachesTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-UserCachesTests/Pods-UserCachesTests.release.xcconfig"; sourceTree = "<group>"; };
 		F2FF94C066D7E1958B4F08BF /* Pods-UserCaches.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserCaches.release.xcconfig"; path = "Pods/Target Support Files/Pods-UserCaches/Pods-UserCaches.release.xcconfig"; sourceTree = "<group>"; };
 		F46A6487936ADE8CE71F44A9 /* Pods_UserCaches.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UserCaches.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB5DBECF20C78CFB00A09C52 /* CodingError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodingError.swift; sourceTree = "<group>"; };
 		FB72ECBA20C62A3200D07BAD /* CacheCodability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheCodability.swift; sourceTree = "<group>"; };
 		FB72ECBC20C6301200D07BAD /* UserCachesSettable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCachesSettable.swift; sourceTree = "<group>"; };
 		FB72ECBE20C6705E00D07BAD /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				FBF77DB620C3D3B000664B3F /* CacheCodable.swift */,
 				FB72ECBA20C62A3200D07BAD /* CacheCodability.swift */,
 				FBF77DB320C3D3B000664B3F /* CacheManager.swift */,
+				FB5DBECF20C78CFB00A09C52 /* CodingError.swift */,
 				FBF77DB420C3D3B000664B3F /* DefaultTypes.swift */,
 				FBF77DB520C3D3B000664B3F /* UserCaches.swift */,
 				FB72ECBC20C6301200D07BAD /* UserCachesSettable.swift */,
@@ -312,6 +315,7 @@
 				FBF77DB720C3D3B100664B3F /* CacheManager.swift in Sources */,
 				FBF77DB820C3D3B100664B3F /* DefaultTypes.swift in Sources */,
 				FB72ECBD20C6301200D07BAD /* UserCachesSettable.swift in Sources */,
+				FB5DBED020C78CFB00A09C52 /* CodingError.swift in Sources */,
 				FB72ECBB20C62A3200D07BAD /* CacheCodability.swift in Sources */,
 				FBF77DB920C3D3B100664B3F /* UserCaches.swift in Sources */,
 			);

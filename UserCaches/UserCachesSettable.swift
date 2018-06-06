@@ -42,7 +42,7 @@ public protocol UserCachesSettable {
     var key: String { get }
 
     /// Indicate the key style. Default is CacheKeyMode.raw. See: *CacheKeyMode*
-    var identifierModel: CacheKeyMode { get }
+    var identifierMode: CacheKeyMode { get }
 }
 
 public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue == String {
@@ -92,7 +92,7 @@ public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue 
             `case` = `case`.replacingOccurrences(of: "_", with: ".")
         }
 
-        switch identifierModel {
+        switch identifierMode {
         case .raw: break
         case .identifyType:
             identifyType()
@@ -105,7 +105,7 @@ public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue 
         return [type, `case`].joined(separator: ".")
     }
 
-    public var identifierModel: CacheKeyMode { return .raw }
+    public var identifierMode: CacheKeyMode { return .raw }
 
     private var _asciiUpperCaseTable: UInt64 { @inline(__always) get { return 0b0000_0000_0000_0000_0001_1111_1111_1111_0000_0000_0000_0000_0000_0000_0000_0000 } }
 }

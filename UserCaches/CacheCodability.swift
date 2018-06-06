@@ -13,30 +13,26 @@ public struct CacheCodability<T> {
 }
 
 extension CacheCodability: CacheEncodable where T: Encodable {
-    public func toData() -> Data {
-        var k: UInt32 = TypeHeader.codable.rawValue
-        let header = Data(bytes: &k, count: MemoryLayout.size(ofValue: k))
-        let data = try! JSONEncoder().encode(value)
-        var count = data.count
-        let countField = Data(bytes: &count, count: MemoryLayout.size(ofValue: count))
-        return header + countField + data
+    public func toData() throws -> Data {
+        do {
+            let data = try JSONEncoder().encode(value)
+            return _todata_countable_case(value: data, count: data.count, header: .codable)
+        } catch {
+            throw EncodingError.invalidValue(.codable, EncodingError.Context(debugDescription: "Error: can't encode the Encodable type(\(T.self))", underlyingError: error))
+        }
     }
 }
 
 extension CacheCodability: CacheDecodable where T: Decodable {
-    public static func initialize(fromCache data: Data) -> (instance: CacheCodability<T>, restData: Data) {
-        assert(data.count >= MemoryLayout<UInt32>.size + MemoryLayout<Int>.size)
-        var k: UInt32 = 0
-        (data as NSData).getBytes(&k, length: MemoryLayout<UInt32>.size)
-        assert(k == TypeHeader.codable.rawValue)
-
-        var count = 0
-        var data = data.subrangeToEnd(withOffset: MemoryLayout<UInt32>.size)
-        (data as NSData).getBytes(&count, length: MemoryLayout.size(ofValue: count))
-        data = data.subrangeToEnd(withOffset: MemoryLayout.size(ofValue: count))
-
-        let v = try! JSONDecoder().decode(T.self, from: data[..<data.startIndex.advanced(by: count)])
-        return (CacheCodability(value: v), data[data.startIndex.advanced(by: count)...])
+    public static func initialize(fromCache data: Data) throws -> (instance: CacheCodability<T>, restData: Data) {
+        let process = try _initialize_countable_case(data, header: .codable)
+        let (data, count) = (process.data, process.count)
+        do {
+            let v = try JSONDecoder().decode(T.self, from: data[..<data.startIndex.advanced(by: count)])
+            return (CacheCodability(value: v), data[data.startIndex.advanced(by: count)...])
+        } catch {
+            throw DecodingError.containterIncomplete(.codable, DecodingError.Context(debugDescription: "Error: can't wrap \(T.self) to CacheCodability", underlyingError: error))
+        }
     }
 }
 

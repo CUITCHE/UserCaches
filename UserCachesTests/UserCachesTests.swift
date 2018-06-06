@@ -14,19 +14,17 @@ enum ComOrganizationProductCaches: String, UserCachesSettable {
     case array_boolean, array_int, array_float, array_double, array_date, array_codable
     case dict_boolean, dict_int, dict_com_1, dict_com_2, dict_com_3, dict_com_4, dict_codable
 
-    var identifierModel: CacheKeyMode { return .identifier }
+    var identifierMode: CacheKeyMode { return .identifier }
 }
-
+var once = true
 class UserCachesTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
+        if once {
+            print(UserCaches.standard.db.db)
+            once = false
+        }
     }
 
     func testSingleSaveCache() {

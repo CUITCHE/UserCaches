@@ -13,7 +13,7 @@ open class UserCaches {
     public enum Error: Swift.Error {
         case noSuchValue
     }
-    private let db: CacheManager
+    let db: CacheManager
     private var _cache = [String: CacheDecodable]()
 
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at user.documents directory.
@@ -32,7 +32,8 @@ open class UserCaches {
     /// - Parameters:
     ///   - value: A value that defer to `CacheEncodable`
     ///   - defaultName: The key associated with value.
-    /// - Throws: SQL Execute Error.
+    /// - Throws:
+    ///   - SQL Execute Error.
     ///   - `EncodingError.invalidValue` if a non-conforming floating-point value is encountered during encoding, and the encoding strategy is `.throw`.
     ///   - An error if any value throws an error during encoding.
     open func set(_ value: CacheEncodable, forKey defaultName: String) throws {

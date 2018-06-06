@@ -17,10 +17,10 @@ try UserCaches.standard.set(intVal, forKey: key)
 let cache: Int = try UserCaches.standard.value(forKey: key)
 ```
 
-`UserCaches.standard` is a global instance of UserCaches, also could create new instance through:
+`UserCaches.standard` is a global instance of UserCaches, also could create new instance:
 
 ```swift
-let cacheHelper = UserCaches(suiteName: "com.usercache.helper")
+let cacheHelper = try UserCaches(suiteName: "com.usercache.helper")
 // The cache file is located at ${YourAppDocuments}/com.usercache.helper.db
 ```
 
@@ -47,7 +47,7 @@ enum ComBaiduMobileUserSetting: String, UserCachesSettable {
     case privacy_blacklist
     /// 字体大小
     case font_size
-    var identifierModel: CacheKeyMode { return .identifier }
+    var identifierMode: CacheKeyMode { return .identifier }
 }
 // Save caches
 ComBaiduMobileUserSetting.privacy_findMeByPhoneNumber.storage = true
@@ -65,7 +65,7 @@ let blacklist: [CacheCodability<User>] = ComBaiduMobileUserSetting.privacy_black
 let fontSize: Int = ComBaiduMobileUserSetting.font_size.value() ?? 16
 ```
 
-If you set `identifierModel` to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-case letter to lower-case letter and insert "." to translated left side on enum-name and replace "_" with "." On enum-case. 
+If you set `identifierMode` to `CacheKeyMode.identifier`, `UserCachesSettable` will translate upper-case letter to lower-case letter and insert "." to translated left side on enum-name and replace "_" with "." on enum-case. 
 
 As above:
 
@@ -79,16 +79,16 @@ The `case privacy_findMeByPhoneNumber` is translated to `com.baidu.mobile.user.s
 
 UseCaches support by default: 
 
-| Default Support Type                                |
-| --------------------------------------------------- |
-| Bool                                                |
-| Int, Int64, UInt, Uint64                            |
-| Float, Double                                       |
-| String, Data                                        |
-| Date (Implement with TimeInterval)                  |
-| Array\<CacheCodable>                                |
+| Default Support Type                     |
+| ---------------------------------------- |
+| Bool                                     |
+| Int, Int64, UInt, Uint64                 |
+| Float, Double                            |
+| String, Data                             |
+| Date (Implement with TimeInterval)       |
+| Array\<CacheCodable>                     |
 | Dictionary\<Key: CacheCodable, Value: CacheCodable> |
-| CacheCodability\<Codable>                           |
+| CacheCodability\<Codable>                |
 
 Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap the struct (or class), UserCaches also accept it. See above `CacheCodability<User>`
 
@@ -112,7 +112,7 @@ Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap 
 
    ```
    use_frameworks!
-   
+
    target 'YourAppTargetName' do
        pod 'UserCaches', '~> 0.0.1'
    end
