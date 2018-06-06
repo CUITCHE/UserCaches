@@ -30,4 +30,5 @@ public enum DecodingError: Error {
     case invalidLength(TypeHeader, Context)
     case typeMisMatch(TypeHeader, Context)
     case containterIncomplete(TypeHeader, Context)
+    case invalidValue(TypeHeader, Context)
 }

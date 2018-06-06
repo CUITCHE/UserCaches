@@ -43,14 +43,13 @@ func throwByCondition(_ condition: @autoclosure () -> Bool, _ exception: @autocl
 private func _initialize<T: Numeric>(fromCache data: Data, header: TypeHeader) throws -> (instance: T, restData: Data) {
     try throwByCondition(data.count >= MemoryLayout<UInt32>.size + MemoryLayout<T>.size,
                          DecodingError.invalidLength(header, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but now is \(data.count)", underlyingError: nil)))
-    var k: UInt32 = 0
-    (data as NSData).getBytes(&k, length: MemoryLayout<UInt32>.size)
+
+    let k = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
     try throwByCondition(k == header.rawValue,
                          DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but current is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
 
-    var v: T = 0
     let data = data.subrangeToEnd(withOffset: MemoryLayout<UInt32>.size)
-    (data as NSData).getBytes(&v, length: MemoryLayout<T>.size)
+    let v = data.withUnsafeBytes { (T_ptr: UnsafePointer<T>) in return T_ptr.pointee }
     return (v, data.subrangeToEnd(withOffset: MemoryLayout<T>.size))
 }
 
@@ -64,11 +63,11 @@ private func _toData<T: Numeric>(value: T, header: TypeHeader) -> Data {
 }
 
 extension Bool: CacheCodable {
-    public static func initialize(fromCache data: Data) -> (instance: Bool, restData: Data) {
-        assert(data.count >= 4)
-        var v: UInt32 = 0
-        (data as NSData).getBytes(&v, length: MemoryLayout.size(ofValue: v))
-        assert(v & TypeHeader.bool.rawValue == TypeHeader.bool.rawValue)
+    public static func initialize(fromCache data: Data) throws -> (instance: Bool, restData: Data) {
+        try throwByCondition(data.count >= MemoryLayout<UInt32>.size, DecodingError.invalidLength(.bool, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout<UInt32>.size)), but now is \(data.count)", underlyingError: nil)))
+
+        let v = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
+        try throwByCondition(v & TypeHeader.bool.rawValue == TypeHeader.bool.rawValue, DecodingError.invalidValue(.bool, DecodingError.Context(debugDescription: "Error: the indicated data(\(v)) is not a boolean value.", underlyingError: nil)))
         return (data[data.startIndex] == 1, data.subrangeToEnd(withOffset: MemoryLayout.size(ofValue: v)))
     }
 
@@ -154,13 +153,13 @@ extension Date: CacheCodable {
 func _initialize_countable_case(_ data: Data, header: TypeHeader) throws -> (data: Data, count: Int) {
     try throwByCondition(data.count >= MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size,
                          DecodingError.invalidLength(header, .init(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but now is \(data.count)",     underlyingError: nil)))
-    var k: UInt32 = 0
-    (data as NSData).getBytes(&k, length: MemoryLayout<UInt32>.size)
-    assert(k == header.rawValue)
+
+    let k = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
+    try throwByCondition(k == header.rawValue,
+                         DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but current is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
 
     var data = data.subrangeToEnd(withOffset: MemoryLayout<UInt32>.size)
-    var cnt = 0
-    (data as NSData).getBytes(&cnt, length: MemoryLayout<Int>.size)
+    let cnt = data.withUnsafeBytes { (int_ptr: UnsafePointer<Int>) in return int_ptr.pointee }
     data = data.subrangeToEnd(withOffset: MemoryLayout<Int>.size)
     return (data, cnt)
 }
@@ -258,15 +257,19 @@ extension Dictionary: CacheDecodable where Key: CacheDecodable, Value: CacheDeco
         let process = try _initialize_countable_case(data, header: .dictionary)
         var data = process.data
         var dictionay = [Key: Value]()
+        var sentry = false
         do {
             for _ in 0..<process.count {
+                sentry = false
                 let k = try Key.initialize(fromCache: data)
+                sentry = true
                 let v = try Value.initialize(fromCache: k.restData)
                 dictionay[k.instance] = v.instance
                 data = v.restData
             }
         } catch {
-            throw DecodingError.containterIncomplete(.dictionary, DecodingError.Context(debugDescription: "Error: can't decode Dictionary", underlyingError: error))
+            let desc = sentry ? "Error: can't decode Key(\(Key.self))" : "Error: can't decode Value(\(Value.self))"
+            throw DecodingError.containterIncomplete(.dictionary, DecodingError.Context(debugDescription: desc, underlyingError: error))
         }
         return (dictionay, data)
     }

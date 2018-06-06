@@ -19,14 +19,21 @@ class CacheManager {
     let db: Connection
 
     enum Error: Swift.Error {
-        case Init(String)
+        case initialize(String)
     }
 
     init(cacheName name: String) throws {
+        #if os(Linux)
+        let fp = fopen(name + ".db", "w")
+        guard fp != nil else { throw Error.initialize("Error: unable to open \(name).db file.") }
+        fclose(fp)
+        let fileUrl = URL(fileURLWithPath: name)
+        #else
         let fileUrl = try FileManager.default.url(for: .documentDirectory,
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
                                                   create: true).appendingPathComponent(name + ".db")
+        #endif
         db = try Connection(fileUrl.absoluteString)
         try db.run(_cache.create(ifNotExists: true) { t in
             t.column(key)

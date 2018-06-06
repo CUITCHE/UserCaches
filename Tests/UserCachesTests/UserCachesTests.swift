@@ -1,13 +1,10 @@
-//
-//  UserCachesTests.swift
-//  UserCachesTests
-//
-//  Created by hejunqiu on 2018/6/3.
-//  Copyright © 2018年 hejunqiu. All rights reserved.
-//
-
 import XCTest
 @testable import UserCaches
+#if os(Linux)
+import Glibc
+#else
+import Darwin.C
+#endif
 
 enum ComOrganizationProductCaches: String, UserCachesSettable {
     case boolean, int, int_negative, uint, float, double, string, data, date, codable
@@ -16,9 +13,10 @@ enum ComOrganizationProductCaches: String, UserCachesSettable {
 
     var identifierMode: CacheKeyMode { return .identifier }
 }
+
 var once = true
-class UserCachesTests: XCTestCase {
-    
+
+final class UserCachesTests: XCTestCase {
     override func setUp() {
         super.setUp()
         if once {
@@ -83,22 +81,27 @@ class UserCachesTests: XCTestCase {
         ComOrganizationProductCaches.array_int.storage = array1
         XCTAssertEqual(ComOrganizationProductCaches.array_int.value(), array1)
 
-        func random(lower: Int, upper: Int) -> Double {
+        func _random(lower: Int, upper: Int) -> Double {
+            #if os(Linux)
+            let m1 = Double(random() % 1000001) / Double(1000001)
+            let m2 = Double(Int(random()) % (upper - lower) + lower)
+            #else
             let m1 = Double(arc4random() % 1000001) / Double(1000001)
             let m2 = Double(Int(arc4random()) % (upper - lower) + lower)
+            #endif
             return m2 + m1
 
         }
         var array2 = [Float]()
         for _ in 0..<1000 {
-            array2.append(Float(random(lower: 10, upper: 99999999)))
+            array2.append(Float(_random(lower: 10, upper: 99999999)))
         }
         ComOrganizationProductCaches.array_float.storage = array2
         XCTAssertEqual(ComOrganizationProductCaches.array_float.value(), array2)
 
         var array3 = [Double]()
         for _ in 0..<1000 {
-            array3.append(random(lower: 10, upper: 99999999))
+            array3.append(_random(lower: 10, upper: 99999999))
         }
         ComOrganizationProductCaches.array_double.storage = array3
         XCTAssertEqual(ComOrganizationProductCaches.array_double.value(), array3)
@@ -149,12 +152,12 @@ class UserCachesTests: XCTestCase {
         // value is dictionay
         let dict5: [Int: [String: [String]]] = [1: ["423534": ["fref454", "54353", "fewfver"]],
                                                 2: ["fcret453": ["53453", "54353", "543523423dew", "54352342"]]
-                                                ]
+        ]
         ComOrganizationProductCaches.dict_com_4.storage = dict5
         XCTAssertEqual(ComOrganizationProductCaches.dict_com_4.value(), dict5)
 
         let dict6: [String: CacheCodability<User>] = ["abc": CacheCodability(value: User.demo),
-                                                 "xxxxx": CacheCodability(value: User.demo)]
+                                                      "xxxxx": CacheCodability(value: User.demo)]
         ComOrganizationProductCaches.dict_codable.storage = dict6
         XCTAssertEqual(ComOrganizationProductCaches.dict_codable.value(), dict6)
     }
@@ -171,4 +174,10 @@ class UserCachesTests: XCTestCase {
         }
         print(ComOrganizationProductCachesCADsweERF32RFW5FEFG$gtfew2y7DGTHYCDWE.some.key, ComOrganizationProductCaches.data.key)
     }
+    static var allTests = [
+        ("testSingleSaveCache", testSingleSaveCache),
+        ("testArraySaveCache", testArraySaveCache),
+        ("testDictionaySaveCache", testDictionaySaveCache),
+        ("testKeyGeneratePerformance", testKeyGeneratePerformance)
+    ]
 }

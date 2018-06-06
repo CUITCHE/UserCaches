@@ -112,13 +112,31 @@ Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap 
 
    ```
    use_frameworks!
-
+   
    target 'YourAppTargetName' do
        pod 'UserCaches', '~> 0.0.1'
    end
    ```
 
 3. Run `pod install --repo-update`.
+
+### Swift Package Manager
+
+The [Swift Package Manager](https://swift.org/package-manager) is a tool for managing the distribution of Swift code.
+
+1. Add the following to your `Package.swift` file:
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/CUITCHE/UserCaches.git", from: "0.0.3")
+]
+```
+
+1. Build your project:
+
+```
+$ swift build
+```
 
 # Author
 

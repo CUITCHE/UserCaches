@@ -16,8 +16,13 @@ open class UserCaches {
     let db: CacheManager
     private var _cache = [String: CacheDecodable]()
 
+    #if os(Linux)
+    /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at executed directory.
+    open static var standard: UserCaches = try! .init(suiteName: "./user.cache.default.standard")
+    #else
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at user.documents directory.
     open static var standard: UserCaches = try! .init(suiteName: "user.cache.default.standard")
+    #endif
 
     /// Create new cache named `suiteName` at user.documents directory.
     ///
