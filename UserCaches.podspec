@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "UserCaches"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "A key-value storage cache tool like UserDefaults on iOS Platform."
 
   # This description is used to generate tags and improve search results.
