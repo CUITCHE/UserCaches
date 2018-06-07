@@ -31,8 +31,16 @@ func confRead(forKey key: String, configFilepath: String) -> String? {
     return value
 }
 
+let configFilepath: String = {
+    #if os(Linux)
+    return URL(fileURLWithPath: CommandLine.arguments.first!).deletingLastPathComponent().appendingPathComponent("usercaches_config").path
+    #else
+    return "/tmp/usercaches_config"
+    #endif
+}()
+
 extension Conf {
     func stringValue() -> String? {
-        return confRead(forKey: rawValue, configFilepath: "usercaches_config")
+        return confRead(forKey: rawValue, configFilepath: configFilepath)
     }
 }
