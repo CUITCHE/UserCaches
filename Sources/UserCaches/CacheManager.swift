@@ -24,18 +24,12 @@ class CacheManager {
 
     init(cacheName name: String) throws {
         #if os(Linux)
-        let fileUrl: URL
-        if let confed_name = Conf.cache_filepath.stringValue() {
-            fileUrl = URL(fileURLWithPath: confed_name)
-        } else {
-            fileUrl = URL(fileURLWithPath: name)
-        }
-        print("Cache file: \(fileUrl)")
+        let fileUrl = URL(fileURLWithPath: name)
         #else
         let fileUrl = try FileManager.default.url(for: .documentDirectory,
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
-                                                  create: true).appendingPathComponent(name + ".db")
+                                                  create: true).appendingPathComponent(name)
         #endif
         db = try Connection(fileUrl.absoluteString)
         try db.run(_cache.create(ifNotExists: true) { t in
