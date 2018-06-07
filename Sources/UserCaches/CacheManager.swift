@@ -24,14 +24,14 @@ class CacheManager {
 
     init(cacheName name: String) throws {
         #if os(Linux)
-        let fileUrl = URL(fileURLWithPath: name)
+        db = try Connection(name)
         #else
         let fileUrl = try FileManager.default.url(for: .documentDirectory,
                                                   in: .userDomainMask,
                                                   appropriateFor: nil,
                                                   create: true).appendingPathComponent(name)
-        #endif
         db = try Connection(fileUrl.absoluteString)
+        #endif
         try db.run(_cache.create(ifNotExists: true) { t in
             t.column(key)
             t.column(value)

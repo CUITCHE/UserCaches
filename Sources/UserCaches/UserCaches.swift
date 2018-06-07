@@ -21,7 +21,7 @@ open class UserCaches {
         if let filepath = Conf.cache_filepath.stringValue() {
             return filepath
         } else {
-            return URL(fileURLWithPath: CommandLine.arguments.first!).deletingLastPathComponent().appendingPathComponent("user.cache.default.standard.db").absoluteString
+            return URL(fileURLWithPath: CommandLine.arguments.first!).deletingLastPathComponent().appendingPathComponent("user.cache.default.standard.db").path
         }
     }
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" by default at executed directory.
@@ -103,3 +103,4 @@ open class UserCaches {
         try? standard.db.removeAllKey()
     }
 }
+
