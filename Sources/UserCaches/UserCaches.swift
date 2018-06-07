@@ -26,18 +26,21 @@ open class UserCaches {
     }
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" by default at executed directory.
     /// Create it at cache_filepath if you specify the value of cache_filepath at conf.properties.
-    open static var standard: UserCaches = try! .init(suiteName: UserCaches._filename())
+    open static var standard: UserCaches = try! .init(cachePath: UserCaches._filename())
     #else
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at user.documents directory.
-    open static var standard: UserCaches = try! .init(suiteName: "user.cache.default.standard.db")
+    open static var standard: UserCaches = try! .init(cachePath: FileManager.default.url(for: .documentDirectory,
+                                                                                         in: .userDomainMask,
+                                                                                         appropriateFor: nil,
+                                                                                         create: true).appendingPathComponent("user.cache.default.standard.db"))
     #endif
 
-    /// Create new cache named `suiteName` at user.documents directory.
+    /// Create new cache file at the cachePath.
     ///
-    /// - Parameter suiteName: domain `suiteName`
+    /// - Parameter cachePath: A URL indicates cache filepath.
     /// - Throws: Throws an exception if creates failed.
-    public init(suiteName: String) throws {
-        db = try CacheManager(cacheName: suiteName)
+    public init(cachePath: URL) throws {
+        db = try CacheManager(cachePath: cachePath)
     }
 
     /// Insert or update if exists cache for the given key.

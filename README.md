@@ -17,11 +17,12 @@ try UserCaches.standard.set(intVal, forKey: key)
 let cache: Int = try UserCaches.standard.value(forKey: key)
 ```
 
-`UserCaches.standard` is a global instance of UserCaches, also could create new instance:
+`UserCaches.standard` is a global instance of UserCaches.
+
+Could also create new instance:
 
 ```swift
-let cacheHelper = try UserCaches(suiteName: "com.usercache.helper")
-// The cache file is located at ${YourAppDocuments}/com.usercache.helper.db
+let cacheHelper = try UserCaches(cachePath: URL(fileURLWithPath: "/tmp/usercache.db"))
 ```
 
 ### Advance Usage
@@ -112,7 +113,7 @@ Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap 
 
    ```
    use_frameworks!
-   
+
    target 'YourAppTargetName' do
        pod 'UserCaches', '~> 0.0.1'
    end
@@ -132,11 +133,17 @@ dependencies: [
 ]
 ```
 
-1. Build your project:
+2. Build your project:
 
 ```
 $ swift build
 ```
+
+# How to Test
+
+1. `clone` this repo.
+2. `cd` the repo directory.
+3. Execute order`swift test`.
 
 # Author
 

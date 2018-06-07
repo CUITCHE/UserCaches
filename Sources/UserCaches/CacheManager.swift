@@ -22,15 +22,11 @@ class CacheManager {
         case initialize(String)
     }
 
-    init(cacheName name: String) throws {
+    init(cachePath path: URL) throws {
         #if os(Linux)
-        db = try Connection(name)
+        db = try Connection(path.path)
         #else
-        let fileUrl = try FileManager.default.url(for: .documentDirectory,
-                                                  in: .userDomainMask,
-                                                  appropriateFor: nil,
-                                                  create: true).appendingPathComponent(name)
-        db = try Connection(fileUrl.absoluteString)
+        db = try Connection(path.absoluteString)
         #endif
         try db.run(_cache.create(ifNotExists: true) { t in
             t.column(key)
