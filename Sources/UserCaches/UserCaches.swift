@@ -17,8 +17,9 @@ open class UserCaches {
     private var _cache = [String: CacheDecodable]()
 
     #if os(Linux)
-    /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at executed directory.
-    open static var standard: UserCaches = try! .init(suiteName: "./user.cache.default.standard")
+    /// Returns a global instance of UserCaches named "user.cache.default.standard.db" by default at home directory of current user.
+    /// Create it at cache_filepath if you specify the value of cache_filepath at conf.properties.
+    open static var standard: UserCaches = try! .init(suiteName: "user.cache.default.standard")
     #else
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" at user.documents directory.
     open static var standard: UserCaches = try! .init(suiteName: "user.cache.default.standard")

@@ -24,10 +24,13 @@ class CacheManager {
 
     init(cacheName name: String) throws {
         #if os(Linux)
-        let fp = fopen(name + ".db", "w")
-        guard fp != nil else { throw Error.initialize("Error: unable to open \(name).db file.") }
-        fclose(fp)
-        let fileUrl = URL(fileURLWithPath: name)
+        let fileUrl: URL
+        if confed_name = Conf.cache_filepath.stringValue() {
+            fileUrl = URL(fileURLWithPath: confed_name)
+        } else {
+            fileUrl = URL(fileURLWithPath: name)
+        }
+        print("Cache file: \(fileURL)")
         #else
         let fileUrl = try FileManager.default.url(for: .documentDirectory,
                                                   in: .userDomainMask,

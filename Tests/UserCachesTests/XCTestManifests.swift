@@ -4,6 +4,7 @@ import XCTest
 public func allTests() -> [XCTestCaseEntry] {
     return [
         testCase(UserCachesTests.allTests),
+        testCase(ConfTests.allTests),
     ]
 }
 #endif

@@ -1,0 +1,4 @@
+# The cache db file path. Must be absolute string.
+# Create at executed directory by default. See UserCaches.standard.
+# 
+# cache_filepath=/home/xh/test.cache.db
