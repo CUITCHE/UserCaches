@@ -42,11 +42,11 @@ func throwByCondition(_ condition: @autoclosure () -> Bool, _ exception: @autocl
 @inline(__always)
 private func _initialize<T: Numeric>(fromCache data: Data, header: TypeHeader) throws -> (instance: T, restData: Data) {
     try throwByCondition(data.count >= MemoryLayout<UInt32>.size + MemoryLayout<T>.size,
-                         DecodingError.invalidLength(header, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but now is \(data.count)", underlyingError: nil)))
+                         DecodingError.invalidLength(header, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but storage is \(data.count)", underlyingError: nil)))
 
     let k = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
     try throwByCondition(k == header.rawValue,
-                         DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but current is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
+                         DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but storage is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
 
     let data = data.subrangeToEnd(withOffset: MemoryLayout<UInt32>.size)
     let v = data.withUnsafeBytes { (T_ptr: UnsafePointer<T>) in return T_ptr.pointee }
@@ -64,7 +64,7 @@ private func _toData<T: Numeric>(value: T, header: TypeHeader) -> Data {
 
 extension Bool: CacheCodable {
     public static func initialize(fromCache data: Data) throws -> (instance: Bool, restData: Data) {
-        try throwByCondition(data.count >= MemoryLayout<UInt32>.size, DecodingError.invalidLength(.bool, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout<UInt32>.size)), but now is \(data.count)", underlyingError: nil)))
+        try throwByCondition(data.count >= MemoryLayout<UInt32>.size, DecodingError.invalidLength(.bool, DecodingError.Context(debugDescription: "Excepted length is \(MemoryLayout<UInt32>.size)), but storage is \(data.count)", underlyingError: nil)))
 
         let v = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
         try throwByCondition(v & TypeHeader.bool.rawValue == TypeHeader.bool.rawValue, DecodingError.invalidValue(.bool, DecodingError.Context(debugDescription: "Error: the indicated data(\(v)) is not a boolean value.", underlyingError: nil)))
@@ -152,11 +152,11 @@ extension Date: CacheCodable {
 @inline(__always)
 func _initialize_countable_case(_ data: Data, header: TypeHeader) throws -> (data: Data, count: Int) {
     try throwByCondition(data.count >= MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size,
-                         DecodingError.invalidLength(header, .init(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but now is \(data.count)",     underlyingError: nil)))
+                         DecodingError.invalidLength(header, .init(debugDescription: "Excepted length is \(MemoryLayout.size(ofValue: header.rawValue) + MemoryLayout<Int>.size), but storage is \(data.count)",     underlyingError: nil)))
 
     let k = data.withUnsafeBytes { (uint32_ptr: UnsafePointer<UInt32>) in return uint32_ptr.pointee }
     try throwByCondition(k == header.rawValue,
-                         DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but current is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
+                         DecodingError.typeMisMatch(header, DecodingError.Context(debugDescription: "Expected \(header), but storage is \(TypeHeader(rawValue: k) ?? .unknown)", underlyingError: nil)))
 
     var data = data.subrangeToEnd(withOffset: MemoryLayout<UInt32>.size)
     let cnt = data.withUnsafeBytes { (int_ptr: UnsafePointer<Int>) in return int_ptr.pointee }
@@ -177,7 +177,7 @@ extension String: CacheCodable {
     public static func initialize(fromCache data: Data) throws -> (instance: String, restData: Data) {
         let data = try _initialize_countable_case(data, header: .string)
         guard let v = String(data: data.data[..<data.data.startIndex.advanced(by: data.count)], encoding: .utf8) else {
-            throw DecodingError.typeMisMatch(.string, DecodingError.Context(debugDescription: "Error: can't decode a String from Data", underlyingError: nil))
+            throw DecodingError.typeMisMatch(.string, DecodingError.Context(debugDescription: "Error: can't decode a String from Data(\(data))", underlyingError: nil))
         }
         return (v, data.data.subrangeToEnd(withOffset: data.count))
     }

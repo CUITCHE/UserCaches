@@ -54,7 +54,13 @@ public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue 
     ///
     /// Also use the type defer to **Codable**. Wrap Codable by **CacheCodability** (CacheCodability(value: Codable)).
     public var storage: CacheEncodable {
-        nonmutating set { _ = try? UserCaches.standard.set(newValue, forKey: key) }
+        nonmutating set {
+            do {
+                try UserCaches.standard.set(newValue, forKey: key)
+            } catch {
+                print(error)
+            }
+        }
         get { assertionFailure("The storage.getter is abandon. And it always return 0 at product environment."); return 0 }
     }
 
@@ -62,15 +68,25 @@ public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue 
     ///
     /// - Returns: A value deferred to CacheDecodable.
     public func value<T: CacheDecodable>() -> T? {
-        return try? UserCaches.standard.value(forKey: key)
+        do {
+            return try UserCaches.standard.value(forKey: key)
+        } catch {
+            print(error)
+        }
+        return nil
     }
 
     /// Get cache from a global instance of UserCaches(standard).
     ///
     /// - Returns: A value deferred to Decodable.
     public func valueofCodable<T: Decodable>() -> T? {
-        let v: CacheCodability<T>? = try? UserCaches.standard.value(forKey: key)
-        return v?.value
+        do {
+            let v: CacheCodability<T> = try UserCaches.standard.value(forKey: key)
+            return v.value
+        } catch {
+            print(error)
+        }
+        return nil
     }
 
     public var key: String {

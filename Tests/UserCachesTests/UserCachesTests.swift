@@ -56,6 +56,9 @@ final class UserCachesTests: XCTestCase {
         ComOrganizationProductCaches.date.storage = date
         let date1: Date? = ComOrganizationProductCaches.date.value()
         XCTAssertEqual(date1?.timeIntervalSince1970, date.timeIntervalSince1970)
+        if let date2: TimeInterval = ComOrganizationProductCaches.date.value() {
+            print(date2)
+        }
 
         let app = App(users: [User(name: "Li Hua", age: 18, score: 550),
                               User(name: "Han Meimei", age: 19, score: 690)],
