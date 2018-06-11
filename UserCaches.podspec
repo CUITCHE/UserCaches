@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "UserCaches"
-  s.version      = "0.0.3"
+  s.version      = "0.0.5"
   s.summary      = "A key-value storage, Swift language cache tool like UserDefaults on iOS Platform."
 
   # This description is used to generate tags and improve search results.
@@ -68,8 +68,8 @@ Pod::Spec.new do |s|
 
   # s.platform     = :ios
   s.platform     = :ios, "8.0"
-
-  #  When using multiple platforms
+  
+#  When using multiple platforms
   # s.ios.deployment_target = "5.0"
   # s.osx.deployment_target = "10.7"
   # s.watchos.deployment_target = "2.0"
@@ -93,7 +93,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Sources/UserCaches/*.swift"
+  s.source_files  = "Sources/UserCaches/**/*.swift"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"

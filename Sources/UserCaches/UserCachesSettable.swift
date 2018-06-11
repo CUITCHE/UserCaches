@@ -50,7 +50,7 @@ public extension UserCachesSettable where Self: RawRepresentable, Self.RawValue 
     ///
     /// The stored value must defer to CacheEncodable. UserCaches framework has builtin some type defered it:
     ///
-    /// [**Bool**, **Int**, **UInt**, **Float**, **Double**, **String**, **Data**, **Date**, **Array<CacheEncodable>**, **Dictionary<CacheEncodable, CacheEncodable>**].
+    /// [**Bool**, **Int**, **Int64** **UInt**, **UInt64** **Float**, **Double**, **String**, **Data**, **Date**, **Array<CacheEncodable>**, **Dictionary<CacheEncodable, CacheEncodable>**], **Codable**.
     ///
     /// Also use the type defer to **Codable**. Wrap Codable by **CacheCodability** (CacheCodability(value: Codable)).
     public var storage: CacheEncodable {

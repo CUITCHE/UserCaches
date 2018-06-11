@@ -14,7 +14,19 @@ open class UserCaches {
         case noSuchValue
     }
     let db: CacheManager
-    private var _cache = [String: CacheDecodable]()
+    private var _cacheContent = DiscardableCacheContent()
+    private let semaphore = DispatchSemaphore(value: 1)
+    private func _useCache<T>(closure: (_ cache: inout [String: CacheDecodable]) throws -> T) rethrows -> T {
+        semaphore.wait()
+        if !_cacheContent.beginContentAccess() {
+            _cacheContent.reload()
+        }
+        defer {
+            semaphore.signal()
+            _cacheContent.endContentAccess()
+        }
+        return try closure(&_cacheContent._cache!)
+    }
 
     #if os(Linux)
     private static func _filename() -> String {
@@ -56,8 +68,8 @@ open class UserCaches {
         let cachedId = try db.findCacheKey(defaultName)
         if cachedId != CacheNotFound {
             try db.updateCache(try value.toData(), where: cachedId)
-            if _cache[defaultName] != nil, let v = value as? CacheDecodable {
-                _cache[defaultName] = v
+            if _useCache(closure: { $0[defaultName] != nil }), let v = value as? CacheDecodable {
+                _useCache { $0[defaultName] = v }
             }
         } else {
             try db.insertCache(value.toData(), forKey: defaultName)
@@ -74,7 +86,7 @@ open class UserCaches {
     ///   - `DecodingError.dataCorrupted` if values requested from the payload are corrupted, or if the given data is not valid JSON.
     ///   - An error if any value throws an error during decoding.
     open func value<T: CacheDecodable>(forKey defaultName: String) throws -> T {
-        if let v = _cache[defaultName] as? T {
+        if let v = _useCache(closure: { $0[defaultName] }) as? T {
             return v
         }
         let cachedId = try db.findCacheKey(defaultName)
@@ -82,28 +94,36 @@ open class UserCaches {
 
         if let data = try db.selectCache(where: cachedId) {
             let instance = try T.initialize(fromCache: data)
-            _cache[defaultName] = instance.instance
+            _useCache { $0[defaultName] = instance.instance }
             return instance.instance
         }
         throw Error.noSuchValue
     }
 
-    /// Remove recorde from disk.
+    /// Remove cache from disk with the key.
     ///
     /// - Parameter key: The key.
     /// - Throws: SQL Execute Error.
     open func removeKey(_ key: String) throws {
         let cachedId = try db.findCacheKey(key)
         if cachedId != CacheNotFound {
-            _cache.removeValue(forKey: key)
+            _ = _useCache { $0.removeValue(forKey: key) }
             try db.removeCache(where: cachedId)
         }
     }
 
-    /// Remove all keys of standard global instance from disk
+    /// Remove all of cache from disk and memory.
+    ///
+    /// - Throws: SQL Execute Error.
+    open func removeAllKey() throws {
+        _useCache {
+            $0.removeAll()
+        }
+        try db.removeAllKey()
+    }
+
+    /// Remove all keys of standard global instance from disk. And clean memory cache.
     open static func resetStandardUserDefaults() {
-        standard._cache.removeAll()
-        try? standard.db.removeAllKey()
+        try? standard.removeAllKey()
     }
 }
-
