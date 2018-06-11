@@ -1,12 +1,15 @@
-language: objective-c
-osx_image: xcode9.3
-xcode_workspace: UserCaches.xcworkspace
-xcode_scheme: UserCachesTests
-befoe_install: 
-  - env
-  - xcodebuild -version
-  - xcodebuild -showsdks
-  - xcpretty --version
-script: 
-  - set -o pipefail
-  - xcodebuild test -workspace "$TRAVIS_XCODE_WORKSPACE" -scheme "$TRAVIS_XCODE_SCHEME" -destination 'platform=iOS Simulator,name=iPhone 6s,OS=11.3' | xcpretty
+matrix:
+  include:
+    - os: linux
+      language: generic
+      dist: trusty
+      sudo: required
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+script:
+  - swift build
+  - swift test
+before_install:
+  - chmod ugo+x ./scripts/run-tests.sh
+  - . ./scripts/run-tests.sh
