@@ -29,11 +29,11 @@ open class UserCaches {
     }
 
     #if os(Linux)
-    private static func _filename() -> String {
+    private static func _filename() -> URL {
         if let filepath = Conf.cache_filepath.stringValue() {
-            return filepath
+            return URL(string: filepath)!
         } else {
-            return URL(fileURLWithPath: CommandLine.arguments.first!).deletingLastPathComponent().appendingPathComponent("user.cache.default.standard.db").path
+            return URL(fileURLWithPath: CommandLine.arguments.first!).deletingLastPathComponent().appendingPathComponent("user.cache.default.standard.db")
         }
     }
     /// Returns a global instance of UserCaches named "user.cache.default.standard.db" by default at executed directory.
