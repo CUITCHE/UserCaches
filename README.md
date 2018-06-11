@@ -115,7 +115,7 @@ Especially, if a struct (or class) defer to `Codable`, use CacheCodability wrap 
    use_frameworks!
 
    target 'YourAppTargetName' do
-       pod 'UserCaches', '~> 0.0.1'
+       pod 'UserCaches', '~> 0.0.5'
    end
    ```
 
